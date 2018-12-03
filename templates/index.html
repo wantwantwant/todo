@@ -2,6 +2,52 @@
 {% block title %}待办事项程序{% endblock %}
 
 {% block content%}
-<button class="btn">测试</button>
+<div id="todo-add">
+  <form action="{{ url_for('add') }}" method="post">
+    <textarea rows=5 cols=50 placeholder="请输入待办事项" name="content"></textarea>
+    <button type="submit">添加</button>
+  </form>
+</div>
+
+<hr>
+
+<div id="todo-list">
+  <table style="border:1px solid black;">
+    <th>
+{#      <td>序号</td>#}
+      <td>状态</td>
+      <td>内容</td>
+      <td>删除</td>
+      <td>完成</td>
+    </th>
+    {% for todo in todo_list %}
+      <tr>
+        {% if todo.status == 0 %}
+          <td>未完成</td>
+        {% elif todo.status == 1 %}
+          <td>已完成</td>
+        {% endif %}
+        <td>{{ todo.status }}</td>
+        <td>{{ todo.content }}</td>
+        <td><a href="#">×</a></td>
+        <td><a href="#">√</a></td>
+      </tr>
+    {% endfor %}
+{#    <tr>#}
+{#      <td>1</td>#}
+{#      <td>已完成</td>#}
+{#      <td>早上记得打卡</td>#}
+{#      <td><a href="#">×</a></td>#}
+{#      <td><a href="#">√</a></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <td>2</td>#}
+{#      <td>未完成</td>#}
+{#      <td>记得双十二提前加购</td>#}
+{#      <td><a href="#">×</a></td>#}
+{#      <td><a href="#">√</a></td>#}
+{#    </tr>#}
+  </table>
+</div>
 {% endblock %}
 

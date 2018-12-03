@@ -5,8 +5,8 @@ from flask import Flask, url_for,render_template, redirect, request
 
 app = Flask(__name__)
 # 数据库实例
-db = pymongo.MongoClient('127.0.0.1', 27017)
-db.todo
+content = pymongo.MongoClient('127.0.0.1', 27017)
+db = content.todo
 # mongo    TODO文档结构
 class Todo(object):
     """
@@ -23,13 +23,32 @@ class Todo(object):
         }
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+def index():
+    return redirect(url_for('get'))
 
 @app.route('/get')
 def get():
     """展示todo列表"""
-    pass
+    todo_list = db.todo.find({})
+    print(todo_list)
+    return render_template('index.html', todo_list= todo_list)
+
+@app.route('/add', methods=['POST'])
+def add():
+    """添加一条todo"""
+    form = request.form
+    content = form['content']
+    print(content)
+    if content:
+        affected_id = db.todo.insert({
+            "content": content,
+            "create_time": datetime.now(),
+            "status": 0,
+            "finish_time": None
+        })
+        print(affected_id)
+        if affected_id:
+            return redirect(url_for('index'))
 
 @app.route('/finish')
 def finish():
