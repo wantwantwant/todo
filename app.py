@@ -30,7 +30,7 @@ def index():
 @app.route('/get')
 def get():
     """展示todo列表"""
-    todo_list = db.todo.find({})
+    todo_list = db.todo.find({}).sort([("finish_time",1),("create_time",1)])
     print(todo_list)
     return render_template('index.html', todo_list= todo_list)
 
@@ -81,4 +81,4 @@ def delete():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

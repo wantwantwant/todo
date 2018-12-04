@@ -6,14 +6,14 @@
   <div id="navigation" class="container-fluid">
     <nav class="navbar navbar-default nav-inverse">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-th-list"></span></a>
+        <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-th-list">TODO</span></a>
       </div>
     </nav>
   </div>
 
 
 {#  添加todo表单#}
-<div id="todo-add container">
+<div id="todo-add" class="container">
   <form action="{{ url_for('add') }}" method="post" class="form-inline float-right">
     <textarea rows=5 cols=50 placeholder="请输入待办事项" name="content"></textarea>
     <button type="submit" class="btn btn-success btn-lg" style="height:120px;">添加</button>
@@ -25,6 +25,7 @@
 <div id="todo-list">
   <table class="table table-striped">
     <th>
+      <td>创建时间</td>
       <td>状态</td>
       <td>内容</td>
       <td>删除</td>
@@ -33,6 +34,7 @@
     {% for todo in todo_list %}
       <tr>
         <td>{{ loop.index }}</td>
+        <td>{{todo.create_time  }}</td>
         {% if todo.status == 0 %}
           <td><span class="glyphicon glyphicon-asterisk btn-warning"></span></td>
         {% elif todo.status == 1 %}
