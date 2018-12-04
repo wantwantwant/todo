@@ -1,4 +1,5 @@
 import pymongo
+from bson.objectid import ObjectId
 from datetime import datetime
 from flask import Flask, url_for,render_template, redirect, request
 
@@ -53,16 +54,28 @@ def add():
 @app.route('/finish')
 def finish():
     """更新状态为已完成"""
-    pass
+    args = request.args
+    _id = args['_id']
+    affect_id = db.todo.update(
+        {"_id":ObjectId(_id)},
+        {
+           "$set": {
+               "status": 1,
+               "finish_time": datetime.now()
+             }
+        }
+    )
+    print(affect_id)
+    return redirect(url_for('index'))
 
 @app.route('/delete')
 def delete():
     """删除无用的todo"""
     args = request.args
-    content = args['content']
-    print(content)
+    _id = args['_id']
+    print(_id)
     affect_id = db.todo.remove({
-      "content": content
+      "_id": ObjectId(_id)
     })
     print(affect_id)
     return redirect(url_for('index'))
