@@ -14,6 +14,7 @@ class Todo(object):
     一行待办事项数据结构；
     字段：事项内容，添加创建时间，状态(未完成、已完成：完成时间)
     """
+
     @staticmethod
     def create_doc(self, content):
         return {
@@ -30,8 +31,15 @@ def index():
 @app.route('/get')
 def get():
     """展示todo列表"""
-    todo_list = db.todo.find({}).sort([("finish_time",1),("create_time",1)])
-    print(todo_list)
+    todos = db.todo.find({}).sort([("finish_time",1),("create_time",1)])  # 返回迭代器，只能遍历一次，时间格式化最好在数据库查询语句中处理。
+    todo_list=[]
+    for todo in todos:
+        todo_line={}
+        todo_line['_id']= todo['_id']
+        todo_line['status']=todo['status']
+        todo_line['content']=todo['content']
+        todo_line['create_time']= todo['create_time'].strftime('%y-%m-%d %H:%M:%S')
+        todo_list.append(todo_line)
     return render_template('index.html', todo_list= todo_list)
 
 @app.route('/add', methods=['POST'])
